@@ -4,7 +4,7 @@ class minecraft {
   }
   file {'/opt/minecraft/server.jar':
     ensure => file,
-    source => https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
+    source => 'https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar'
   }
   package {'java':
     ensure => present,
