@@ -6,10 +6,14 @@ class minecraft {
     ensure => file,
     source => 'https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar'
   }
-  package {'java':
-    ensure => file,
-    source => 'https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm'
+  file {'./jdk-17_linux-x64_bin.rpm':
+  source => 'puppet:///modules/java/jdk-8u161-linux-x64.rpm',
   }
+   package { 'java':
+   provider => 'rpm',
+   ensure   => 'present',
+   source   => 'https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm',
+ }
   file {'/opt/minecraft/eula.txt':
     ensure => file,
     content => 'eula=true',
