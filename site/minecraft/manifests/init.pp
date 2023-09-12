@@ -1,22 +1,24 @@
 class minecraft {
+  $url = 'https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar'
+  $install_dir = '/opt/minecraft'
   file {'/opt/minecraft':
     ensure => directory,
   }
-  file {'/opt/minecraft/server.jar':
+  file {"${install_dir}/server.jar":
     ensure => file,
-    source => 'https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar'
+    source => $url,
     before => Service['minecraft'],
   }
-  file {'/opt/minecraft/java.rpm':
+  file {"${install_dir}/java.rpm":
     ensure => file,
     source => 'https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm',
   }
    package { 'java':
      provider => 'rpm',
      ensure   => 'present',
-     source   => '/opt/minecraft/java.rpm',
+     source   => "${install_dir}/java.rpm",
  }
-  file {'/opt/minecraft/eula.txt':
+  file {"${install_dir}/eula.txt":
     ensure => file,
     content => 'eula=true',
   }
@@ -27,5 +29,6 @@ class minecraft {
   service {'minecraft':
     ensure => running,
     enable => true,
+    require => [Package['java'],File["${install_dir}/eula.txt"],File['/etc/systemd/system/minecraft.service']]
   }
 }
